@@ -1,4 +1,5 @@
 import { CreateDocumentDialog } from "@/components/create-document-dialog";
+import { DocumentList } from "@/components/document-list";
 
 export default function Home() {
 	return (
@@ -8,6 +9,10 @@ export default function Home() {
 					<h2>LOGO</h2>
 					<CreateDocumentDialog />
 				</div>
+			</div>
+			<div className="w-full max-w-screen-lg px-2.5 py-4 mx-auto">
+				<h2 className="font-bold text-xl">Your documents</h2>
+				<DocumentList />
 			</div>
 		</div>
 	);

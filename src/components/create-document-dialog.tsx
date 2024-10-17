@@ -1,5 +1,12 @@
 "use client";
+import { trpc } from "@/lib/trpc-client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2, Save } from "lucide-react";
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { Button } from "./ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -8,7 +15,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "./ui/dialog";
-import { Button } from "./ui/button";
 import {
 	Form,
 	FormControl,
@@ -17,13 +23,7 @@ import {
 	FormLabel,
 	FormMessage,
 } from "./ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
-import { Loader2, Save } from "lucide-react";
-import { trpc } from "@/lib/trpc-client";
-import { toast } from "sonner";
 const formSchema = z.object({
 	title: z.string().min(3),
 });

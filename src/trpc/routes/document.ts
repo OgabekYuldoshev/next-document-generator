@@ -1,12 +1,13 @@
+import { existsSync } from "fs";
+import path from "path";
+import { BASIC_HTML, CONTENT_PATH } from "@/constants";
+import { load } from "@/lib/meta-data";
 import { publicProcedure, router } from "@/lib/trpc-server";
 import type { DocumentMetaData } from "@/types";
-import z from "zod";
-import { v4 as uuidv4 } from "uuid";
-import { existsSync } from "fs";
-import { BASIC_HTML, CONTENT_PATH } from "@/constants";
 import { mkdir, writeFile } from "fs/promises";
-import path from "path";
 import matter from "gray-matter";
+import { v4 as uuidv4 } from "uuid";
+import z from "zod";
 
 export const documentRoute = router({
 	createDocument: publicProcedure
@@ -38,4 +39,8 @@ export const documentRoute = router({
 
 			return documentMetaData;
 		}),
+	loadDocuments: publicProcedure.query(async () => {
+		const values = await load();
+		return values;
+	}),
 });
