@@ -1,9 +1,9 @@
+import { appRouter } from "@/trpc/_app";
+import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
-import { trpcServer } from "@hono/trpc-server";
-import { appRouter } from "@/trpc/_app";
 
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const app = new Hono().basePath("/api");
 
