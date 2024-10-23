@@ -1,26 +1,27 @@
 import { existsSync } from "fs";
 import path from "path";
 import { BASIC_HTML, CONTENT_PATH } from "@/constants";
-import { load } from "@/lib/meta-data";
+import { load } from "@/lib/load-data";
 import { publicProcedure, router } from "@/lib/trpc-server";
 import type { DocumentMetaData } from "@/types";
 import { mkdir, writeFile } from "fs/promises";
 import matter from "gray-matter";
-import { v4 as uuidv4 } from "uuid";
 import z from "zod";
+import { snakeCase } from "change-case";
 
 export const documentRoute = router({
 	createDocument: publicProcedure
 		.input(
 			z.object({
 				title: z.string(),
+				key: z.string(),
 			}),
 		)
 		.mutation(async (ctx) => {
-			const { title } = ctx.input;
+			const { title, key } = ctx.input;
 
 			const documentMetaData = {
-				uuid: uuidv4(),
+				key: snakeCase(key),
 				title,
 				created_at: new Date().toISOString(),
 			} satisfies DocumentMetaData;
@@ -33,14 +34,30 @@ export const documentRoute = router({
 
 			const content = matter.stringify(BASIC_HTML, documentMetaData);
 
-			const filePath = path.join(contentPath, `${documentMetaData.uuid}.html`);
+			const filePath = path.join(contentPath, `${documentMetaData.key}.html`);
 
 			await writeFile(filePath, content);
 
 			return documentMetaData;
 		}),
-	loadDocuments: publicProcedure.query(async () => {
-		const values = await load();
-		return values;
-	}),
+	loadDocuments: publicProcedure
+		.input(
+			z.object({
+				currentPage: z.number().default(0),
+				size: z.number().default(25),
+			}),
+		)
+		.query(async ({ input }) => {
+			const { getMetaData, pagenation } = await load(input);
+			const data = await getMetaData(pagenation.data.map((c) => c.path));
+			const { currentPage, size, total } = pagenation;
+			return {
+				items: data,
+				meta: {
+					size,
+					currentPage,
+					total,
+				},
+			};
+		}),
 });

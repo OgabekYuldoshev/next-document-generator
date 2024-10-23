@@ -18,14 +18,18 @@ import {
 import {
 	Form,
 	FormControl,
+	FormDescription,
 	FormField,
 	FormItem,
 	FormLabel,
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import { snakeCase } from "change-case";
+
 const formSchema = z.object({
 	title: z.string().min(3),
+	key: z.string().min(3),
 });
 
 type FormValue = z.infer<typeof formSchema>;
@@ -44,7 +48,11 @@ export const CreateDocumentDialog = () => {
 		resolver: zodResolver(formSchema),
 	});
 	function onSubmit(values: FormValue) {
-		mutate(values);
+		mutate(values, {
+			onSuccess() {
+				form.reset();
+			},
+		});
 	}
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -72,6 +80,25 @@ export const CreateDocumentDialog = () => {
 									<FormControl>
 										<Input {...field} placeholder="Write..." />
 									</FormControl>
+									<FormMessage />
+								</FormItem>
+							)}
+						/>
+						<FormField
+							control={form.control}
+							name="key"
+							render={({ field }) => (
+								<FormItem>
+									<FormLabel>Document key</FormLabel>
+									<FormControl>
+										<Input {...field} placeholder="Write..." />
+									</FormControl>
+									{field.value && (
+										<FormDescription>
+											Document key should be like this:{" "}
+											<code>{snakeCase(field.value)}</code>
+										</FormDescription>
+									)}
 									<FormMessage />
 								</FormItem>
 							)}

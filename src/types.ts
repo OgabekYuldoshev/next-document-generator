@@ -1,5 +1,5 @@
 export type DocumentMetaData = {
-	uuid: string;
+	key: string;
 	title: string;
 	created_at: string;
 };
