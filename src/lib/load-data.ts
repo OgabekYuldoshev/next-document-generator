@@ -1,9 +1,9 @@
 import path from "path";
 import { CONTENT_PATH } from "@/constants";
-import { readFile, readdir, stat } from "fs/promises";
-import memo from "memoize-one";
-import matter from "gray-matter";
 import type { DocumentMetaData } from "@/types";
+import { readFile, readdir, stat } from "fs/promises";
+import matter from "gray-matter";
+import memo from "memoize-one";
 import { firstBy } from "thenby";
 const contentDir = path.join(process.cwd(), CONTENT_PATH);
 
@@ -12,7 +12,7 @@ interface Options {
 	size?: number;
 }
 
-export async function load({ currentPage = 1, size = 2 }: Options) {
+export async function load({ currentPage = 1, size = 2 }: Options = {}) {
 	// Read the files in the folder
 	const c = await readdir(contentDir);
 	// Set created  time from file stat
@@ -55,6 +55,18 @@ export async function load({ currentPage = 1, size = 2 }: Options) {
 					return data as DocumentMetaData;
 				}),
 			);
+		},
+		async find(key: string) {
+			const filePath = contents.find((c) => c.path.includes(key));
+			if (!filePath) {
+				return null;
+			}
+			const fileContent = await readFile(path.join(contentDir, filePath.path));
+			const parsedContent = matter(fileContent);
+			return {
+				meta: parsedContent.data as DocumentMetaData,
+				content: parsedContent.content,
+			};
 		},
 
 		// async getFile(key: string) {

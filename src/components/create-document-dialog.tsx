@@ -1,7 +1,9 @@
 "use client";
 import { trpc } from "@/lib/trpc-client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { snakeCase } from "change-case";
 import { Loader2, Save } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -25,7 +27,6 @@ import {
 	FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { snakeCase } from "change-case";
 
 const formSchema = z.object({
 	title: z.string().min(3),
@@ -35,6 +36,7 @@ const formSchema = z.object({
 type FormValue = z.infer<typeof formSchema>;
 
 export const CreateDocumentDialog = () => {
+	const router = useRouter();
 	const [open, setOpen] = useState(false);
 
 	const { mutate, isPending } = trpc.document.createDocument.useMutation({
@@ -49,7 +51,8 @@ export const CreateDocumentDialog = () => {
 	});
 	function onSubmit(values: FormValue) {
 		mutate(values, {
-			onSuccess() {
+			onSuccess({ key }) {
+				router.push(`/edit/${key}`);
 				form.reset();
 			},
 		});

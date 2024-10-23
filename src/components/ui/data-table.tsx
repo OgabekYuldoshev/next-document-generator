@@ -17,6 +17,7 @@ import {
 	TableRow,
 } from "@/components/ui/table";
 
+import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 import { Button } from "./button";
 import {
 	DropdownMenu,
@@ -31,7 +32,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "./select";
-import { useQueryParam, NumberParam, withDefault } from "use-query-params";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];

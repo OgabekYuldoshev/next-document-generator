@@ -4,10 +4,11 @@ import { BASIC_HTML, CONTENT_PATH } from "@/constants";
 import { load } from "@/lib/load-data";
 import { publicProcedure, router } from "@/lib/trpc-server";
 import type { DocumentMetaData } from "@/types";
+import { TRPCClientError } from "@trpc/client";
+import { snakeCase } from "change-case";
 import { mkdir, writeFile } from "fs/promises";
 import matter from "gray-matter";
 import z from "zod";
-import { snakeCase } from "change-case";
 
 export const documentRoute = router({
 	createDocument: publicProcedure
@@ -59,5 +60,15 @@ export const documentRoute = router({
 					total,
 				},
 			};
+		}),
+	getDocument: publicProcedure
+		.input(z.object({ key: z.string() }))
+		.query(async ({ input }) => {
+			const { find } = await load();
+			const document = await find(input.key);
+			if (!document) {
+				throw new TRPCClientError("Document not found");
+			}
+			return document;
 		}),
 });

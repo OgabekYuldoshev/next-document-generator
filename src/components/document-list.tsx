@@ -1,9 +1,9 @@
 "use client";
 import { trpc } from "@/lib/trpc-client";
+import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { DataTable, TableActions } from "./ui/data-table";
-import { useRouter } from "next/navigation";
-
 export const DocumentList = () => {
 	const router = useRouter();
 	const { data, isFetched } = trpc.document.loadDocuments.useQuery(
@@ -40,7 +40,9 @@ export const DocumentList = () => {
 
 					{
 						header: "Created date",
-						accessorKey: "created_at",
+						accessorFn(item) {
+							return dayjs(item.created_at).format("YYYY-MM-DD HH:mm:ss");
+						},
 					},
 					{
 						id: "actions",
