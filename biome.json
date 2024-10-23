@@ -21,7 +21,8 @@
     "rules": {
       "recommended": true,
       "style": {
-        "useNodejsImportProtocol": "off"
+        "useNodejsImportProtocol": "off",
+        "noInferrableTypes": "off"
       },
       "suspicious": {
         "noExplicitAny": "off"

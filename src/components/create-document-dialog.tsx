@@ -1,5 +1,5 @@
 "use client";
-import { trpc } from "@/lib/trpc-client";
+import { trpc } from "@/lib/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { snakeCase } from "change-case";
 import { Loader2, Save } from "lucide-react";
@@ -39,7 +39,7 @@ export const CreateDocumentDialog = () => {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 
-	const { mutate, isPending } = trpc.document.createDocument.useMutation({
+	const { mutate, isPending } = trpc.document.create.useMutation({
 		onSuccess() {
 			toast.success("Document created successfully");
 			setOpen(false);
@@ -51,8 +51,8 @@ export const CreateDocumentDialog = () => {
 	});
 	function onSubmit(values: FormValue) {
 		mutate(values, {
-			onSuccess({ key }) {
-				router.push(`/edit/${key}`);
+			onSuccess({ uuid }) {
+				router.push(`/edit/${uuid}`);
 				form.reset();
 			},
 		});

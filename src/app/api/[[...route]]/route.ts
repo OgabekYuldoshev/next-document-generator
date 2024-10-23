@@ -1,3 +1,4 @@
+import metadata from "@/lib/metadata";
 import { appRouter } from "@/trpc/_app";
 import { trpcServer } from "@hono/trpc-server";
 import { Hono } from "hono";

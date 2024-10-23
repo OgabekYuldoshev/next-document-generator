@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
 	meta,
 	pageSizeOptions = [10, 25, 30, 40, 50, 100],
 }: DataTableProps<TData, TValue>) {
-	const [_, setCurrentPage] = useQueryParam(
+	const [page, setCurrentPage] = useQueryParam(
 		"page",
 		withDefault(NumberParam, 0),
 	);
@@ -135,7 +135,13 @@ export function DataTable<TData, TValue>({
 					<p className="whitespace-nowrap text-sm font-medium">Per page</p>
 					<Select
 						value={String(meta.size)}
-						onValueChange={(size) => setSize(Number(size))}
+						onValueChange={(size) => {
+							if (size === "10") {
+								setSize(undefined);
+							} else {
+								setSize(Number(size));
+							}
+						}}
 					>
 						<SelectTrigger className="h-8 w-[4.5rem]">
 							<SelectValue placeholder={String(meta.size)} />
@@ -151,11 +157,15 @@ export function DataTable<TData, TValue>({
 				</div>
 				<div className="flex justify-end">
 					<Pagination
-						currentPage={meta.currentPage + 1}
+						currentPage={meta.currentPage}
 						totalPages={meta.total}
-						onPageChange={(pageNumber: number) =>
-							setCurrentPage(pageNumber - 1)
-						}
+						onPageChange={(pageNumber: number) => {
+							if (pageNumber === 1) {
+								setCurrentPage(undefined);
+							} else {
+								setCurrentPage(pageNumber);
+							}
+						}}
 						showPreviousNext
 					/>
 				</div>

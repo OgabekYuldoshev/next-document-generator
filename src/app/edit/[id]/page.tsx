@@ -1,18 +1,17 @@
 "use client";
-import { trpc } from "@/lib/trpc-client";
+import { trpc } from "@/lib/trpc";
 import { Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import React from "react";
 
 export default function Page() {
 	const { id } = useParams<{ id: string }>();
-	const { data, isFetched, isError, error } =
-		trpc.document.getDocument.useQuery(
-			{ key: id },
-			{
-				retry: false,
-			},
-		);
+	const { data, isFetched, isError, error } = trpc.document.single.useQuery(
+		{ key: id },
+		{
+			retry: false,
+		},
+	);
 
 	if (!isFetched) {
 		return (
@@ -32,7 +31,7 @@ export default function Page() {
 
 	return (
 		<main className="flex flex-col">
-			<div>{data?.meta.title}</div>
+			<div>Hello</div>
 		</main>
 	);
 }
