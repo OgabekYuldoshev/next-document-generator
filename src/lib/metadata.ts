@@ -7,15 +7,20 @@ import {
 	METADATA_DIR,
 	METADATA_FILENAME,
 } from "@/constants";
-import type { Content, Metadata } from "@/types";
+import type { Content, Metadata, MetadataSchema } from "@/types";
 import { constantCase } from "change-case";
 import { mkdir, readFile, writeFile } from "fs/promises";
+import sift, { type Query } from "sift";
 import z from "zod";
 import { paginate } from "./paginate";
 
 const schemas = {
 	create: z.object({
 		key: z.string(),
+		title: z.string(),
+	}),
+	update: z.object({
+		content: z.string(),
 		title: z.string(),
 	}),
 };
@@ -56,6 +61,29 @@ class MetaData {
 
 		return contentFile.split(METADATA_DIR)[1];
 	}
+
+	public async readContentFile(uuid: string) {
+		const constentPath = path.resolve(
+			process.cwd(),
+			METADATA_DIR,
+			"contents",
+			`${uuid}.html`,
+		);
+		return readFile(constentPath, "utf8");
+	}
+
+	private async updateContentFile(uuid: string, content: string) {
+		const constentPath = path.resolve(
+			process.cwd(),
+			METADATA_DIR,
+			"contents",
+			`${uuid}.html`,
+		);
+		await writeFile(constentPath, content);
+
+		return readFile(constentPath, "utf8");
+	}
+
 
 	private async updateMetaFile(meta: Metadata) {
 		const metaFilePath = path.resolve(
@@ -106,9 +134,34 @@ class MetaData {
 		return newContent;
 	}
 
-	public update() {}
+	public async update(uuid: string, values: z.infer<typeof schemas.update>) {
+		const meta = await this.getMetaFile();
+		const item = meta.contents.find((c) => c.uuid === uuid);
 
-	public find() {}
+		if (!item) {
+			return null;
+		}
+
+		item.title = values.title
+
+		await this.updateMetaFile(meta)
+		const content = await this.updateContentFile(item.uuid, values.content)
+
+		return {
+			...item,
+			content
+		}
+	}
+
+	// biome-ignore lint/complexity/noBannedTypes: <explanation>
+	public async find<TSchema extends {} = {}>(
+		query: Query<MetadataSchema<TSchema>>,
+	) {
+		const meta = await this.getMetaFile();
+		return await meta.contents.filter(
+			sift<MetadataSchema<TSchema>>(query),
+		);
+	}
 
 	public async getList({
 		currentPage,

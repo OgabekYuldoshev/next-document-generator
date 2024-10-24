@@ -6,11 +6,7 @@ type PaginationResult<T> = {
 	data: T[];
 };
 
-export function paginate<T>(
-	items: T[], // Array of items to paginate
-	currentPage: number, // Current page number
-	pageSize: number, // Number of items per page
-): PaginationResult<T> {
+export function paginate<T>(items: T[], currentPage: number, pageSize: number,): PaginationResult<T> {
 	const totalItems = items.length;
 	const totalPages = Math.ceil(totalItems / pageSize);
 	const page = Math.max(1, Math.min(currentPage, totalPages));

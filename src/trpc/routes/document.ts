@@ -1,4 +1,5 @@
 import metadata from "@/lib/metadata";
+import { TRPCClientError } from "@trpc/client";
 import z from "zod";
 import { publicProcedure, router } from "../server";
 
@@ -13,6 +14,12 @@ export const documentRoute = router({
 		.mutation(async (ctx) => {
 			return metadata.create(ctx.input);
 		}),
+	update: publicProcedure
+		.input(z.object({ uuid: z.string(), content: z.string(), title: z.string() }))
+		.mutation(async (ctx) => {
+			const { uuid, ...values } = ctx.input
+			return metadata.update(uuid, values)
+		}),
 	list: publicProcedure
 		.input(
 			z.object({
@@ -24,8 +31,22 @@ export const documentRoute = router({
 			return metadata.getList(ctx.input);
 		}),
 	single: publicProcedure
-		.input(z.object({ key: z.string() }))
+		.input(z.object({ uuid: z.string() }))
 		.query(async (ctx) => {
-			return {};
+			const c = await metadata.find({
+				$where: function () {
+					return this.uuid === ctx.input.uuid;
+				}
+			})
+
+			const item = c[0]
+
+			if (!item) {
+				throw new TRPCClientError("Content not found!")
+			}
+
+			const content = await metadata.readContentFile(item.uuid)
+
+			return { ...item, content };
 		}),
 });

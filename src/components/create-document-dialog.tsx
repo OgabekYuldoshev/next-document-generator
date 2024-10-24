@@ -1,7 +1,7 @@
 "use client";
 import { trpc } from "@/lib/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { snakeCase } from "change-case";
+import { constantCase, snakeCase } from "change-case";
 import { Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -40,9 +40,10 @@ export const CreateDocumentDialog = () => {
 	const [open, setOpen] = useState(false);
 
 	const { mutate, isPending } = trpc.document.create.useMutation({
-		onSuccess() {
+		onSuccess({ uuid }) {
 			toast.success("Document created successfully");
 			setOpen(false);
+			router.push(`/edit/${uuid}`);
 		},
 	});
 	const form = useForm<FormValue>({
@@ -50,12 +51,7 @@ export const CreateDocumentDialog = () => {
 		resolver: zodResolver(formSchema),
 	});
 	function onSubmit(values: FormValue) {
-		mutate(values, {
-			onSuccess({ uuid }) {
-				router.push(`/edit/${uuid}`);
-				form.reset();
-			},
-		});
+		mutate(values);
 	}
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -79,7 +75,7 @@ export const CreateDocumentDialog = () => {
 							name="title"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Document title</FormLabel>
+									<FormLabel>Title</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Write..." />
 									</FormControl>
@@ -92,14 +88,14 @@ export const CreateDocumentDialog = () => {
 							name="key"
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Document key</FormLabel>
+									<FormLabel>Key</FormLabel>
 									<FormControl>
 										<Input {...field} placeholder="Write..." />
 									</FormControl>
 									{field.value && (
 										<FormDescription>
-											Document key should be like this:{" "}
-											<code>{snakeCase(field.value)}</code>
+											Your key should be like this:{" "}
+											<code>{constantCase(field.value)}</code>
 										</FormDescription>
 									)}
 									<FormMessage />

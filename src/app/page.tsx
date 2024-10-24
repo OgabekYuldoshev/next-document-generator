@@ -5,6 +5,7 @@ import { DataTable, TableActions } from "@/components/ui/data-table";
 import dayjs from "dayjs";
 
 import { trpc } from "@/lib/trpc";
+import { Settings } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 
@@ -33,13 +34,13 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col w-full">
-			<div className="h-16 border-b">
-				<div className="w-full h-full mx-auto max-w-screen-lg px-2.5 flex items-center justify-between">
-					<h2>LOGO</h2>
+			<div className="h-20 border-b">
+				<div className="w-full h-full mx-auto px-8 flex items-center justify-between">
+					<h2 className="font-bold">LOGO</h2>
 					<CreateDocumentDialog />
 				</div>
 			</div>
-			<div className="w-full max-w-screen-lg px-2.5 py-4 mx-auto">
+			<div className="w-full max-w-screen-lg md:px-0 px-8 py-8 mx-auto">
 				<h2 className="font-bold text-xl">Your documents</h2>
 				<div className="mt-4">
 					<DataTable
@@ -61,7 +62,7 @@ export default function Home() {
 								},
 							},
 							{
-								id: "actions",
+								header: "Settings",
 								cell({ row }) {
 									const item = row.original;
 									return (

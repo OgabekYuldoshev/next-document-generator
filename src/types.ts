@@ -1,8 +1,10 @@
-export type DocumentMetaData = {
-	key: string;
-	title: string;
-	created_at: string;
-};
+
+
+export type MetadataSchema<
+	TSchema extends { [key: string]: unknown } = { [key: string]: unknown }
+> = TSchema &
+	Content
+
 
 export interface Metadata {
 	contents: Content[];
