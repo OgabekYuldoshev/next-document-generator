@@ -25,42 +25,44 @@ export default function Page() {
 		);
 	}
 
-	if (isError) {
+	if (isError || !data) {
 		return (
 			<main className="w-full h-screen flex items-center justify-center">
-				<div>{error.message}</div>
+				<div>{error?.message}</div>
 			</main>
 		);
 	}
 
 	return (
 		<EditForm
-			uuid={data?.uuid || ''}
+			uuid={data.uuid}
 			initialValues={{
-				title: data?.title,
-				content: data?.content,
+				title: data.title,
+				content: data.content,
 			}}
 		>
-			<main className="flex flex-col h-screen">
-				<div className="h-20 border-b flex-shrink-0">
-					<div className="w-full h-full px-6 flex items-center justify-between">
-						<h2 className="font-bold">LOGO</h2>
-						<div className="flex items-center gap-4">
-							<Link href={"/"} className={buttonVariants({ variant: "outline" })}>
-								<Home size={18} />
-								Go back
-							</Link>
-							<Button type="submit" variant={"secondary"}>
-								<Save size={18} />
-								Save
-							</Button>
+			{({ isPending }) => (
+				<main className="flex flex-col h-screen">
+					<div className="h-20 border-b flex-shrink-0">
+						<div className="w-full h-full px-6 flex items-center justify-between">
+							<h2 className="font-bold">LOGO</h2>
+							<div className="flex items-center gap-4">
+								<Link href={"/"} className={buttonVariants({ variant: "outline" })}>
+									<Home size={18} />
+									Go back
+								</Link>
+								<Button type="submit" variant={"secondary"}>
+									{isPending ? <Loader2 size={18} /> : <Save size={18} />}
+									Save
+								</Button>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div className="flex-1 p-8">
-					<CodeEditor name="content" />
-				</div>
-			</main>
+					<div className="flex-1 p-8">
+						<CodeEditor name="content" />
+					</div>
+				</main>
+			)}
 		</EditForm>
 	);
 }
