@@ -55,6 +55,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.3",
     "@types/node": "^20",
+    "@types/nunjucks": "^3.2.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^10.0.0",

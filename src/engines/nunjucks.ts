@@ -1,7 +1,8 @@
 import type { BaseEngine } from "./types";
+import n from "nunjucks";
 
 export class NunjucksEngine implements BaseEngine {
-    render(): void {
-        console.log("method render() called for NunjucksEngine");
-    }
+	render(template: string, contex: object) {
+		return n.renderString(template, contex);
+	}
 }

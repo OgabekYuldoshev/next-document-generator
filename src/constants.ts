@@ -18,9 +18,8 @@ export const METADATA_DIR = ".metacontent";
 export const METADATA_FILENAME = "metadata.json";
 
 export const DEFAULT_METADATA = {
-  contents: [],
+	contents: [],
 } as Metadata;
-
 
 export const TEST = `
 <!DOCTYPE html>
@@ -71,7 +70,7 @@ export const TEST = `
 <body>
 
 <header>
-  <h1>Why TypeScript is a Game-Changer for Web Development</h1>
+  <h1>{{name}}</h1>
 </header>
 
 <article>
@@ -129,4 +128,4 @@ function add(a: number, b: number): number {
 </body>
 </html>
 
-`
+`;

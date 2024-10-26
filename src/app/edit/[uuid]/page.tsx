@@ -47,7 +47,10 @@ export default function Page() {
 						<div className="w-full h-full px-6 flex items-center justify-between">
 							<h2 className="font-bold">LOGO</h2>
 							<div className="flex items-center gap-4">
-								<Link href={"/"} className={buttonVariants({ variant: "outline" })}>
+								<Link
+									href={"/"}
+									className={buttonVariants({ variant: "outline" })}
+								>
 									<Home size={18} />
 									Go back
 								</Link>

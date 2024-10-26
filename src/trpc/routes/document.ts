@@ -15,10 +15,12 @@ export const documentRoute = router({
 			return metadata.create(ctx.input);
 		}),
 	update: publicProcedure
-		.input(z.object({ uuid: z.string(), content: z.string(), title: z.string() }))
+		.input(
+			z.object({ uuid: z.string(), content: z.string(), title: z.string() }),
+		)
 		.mutation(async (ctx) => {
-			const { uuid, ...values } = ctx.input
-			return metadata.update(uuid, values)
+			const { uuid, ...values } = ctx.input;
+			return metadata.update(uuid, values);
 		}),
 	list: publicProcedure
 		.input(
@@ -36,16 +38,16 @@ export const documentRoute = router({
 			const c = await metadata.find({
 				$where: function () {
 					return this.uuid === ctx.input.uuid;
-				}
-			})
+				},
+			});
 
-			const item = c[0]
+			const item = c[0];
 
 			if (!item) {
-				throw new TRPCClientError("Content not found!")
+				throw new TRPCClientError("Content not found!");
 			}
 
-			const content = await metadata.readContentFile(item.uuid)
+			const content = await metadata.readContentFile(item.uuid);
 
 			return { ...item, content };
 		}),

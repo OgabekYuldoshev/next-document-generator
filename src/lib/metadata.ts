@@ -84,7 +84,6 @@ class MetaData {
 		return readFile(constentPath, "utf8");
 	}
 
-
 	private async updateMetaFile(meta: Metadata) {
 		const metaFilePath = path.resolve(
 			process.cwd(),
@@ -142,15 +141,15 @@ class MetaData {
 			return null;
 		}
 
-		item.title = values.title
+		item.title = values.title;
 
-		await this.updateMetaFile(meta)
-		const content = await this.updateContentFile(item.uuid, values.content)
+		await this.updateMetaFile(meta);
+		const content = await this.updateContentFile(item.uuid, values.content);
 
 		return {
 			...item,
-			content
-		}
+			content,
+		};
 	}
 
 	// biome-ignore lint/complexity/noBannedTypes: <explanation>
@@ -158,9 +157,7 @@ class MetaData {
 		query: Query<MetadataSchema<TSchema>>,
 	) {
 		const meta = await this.getMetaFile();
-		return await meta.contents.filter(
-			sift<MetadataSchema<TSchema>>(query),
-		);
+		return await meta.contents.filter(sift<MetadataSchema<TSchema>>(query));
 	}
 
 	public async getList({

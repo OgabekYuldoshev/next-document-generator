@@ -1,3 +1,3 @@
 export interface BaseEngine {
-    render(): void
+	render(template: string, contex: object): string;
 }
