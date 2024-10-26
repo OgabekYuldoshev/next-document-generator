@@ -1,14 +1,14 @@
-import { DEFAULT_CONTENT, TEST } from "@/constants";
+import { TEST } from "@/constants";
 import generator from "@/lib/generator";
-import metadata from "@/lib/metadata";
 import { appRouter } from "@/trpc/_app";
 import { trpcServer } from "@hono/trpc-server";
-import { Hono } from "hono";
 import { handle } from "hono/vercel";
+import { createApp } from "@/lib/open-api";
+import { configureOpenApi } from "@/lib/configure-open-api";
 
-// export const runtime = "edge";
+const app = createApp();
 
-const app = new Hono().basePath("/api");
+configureOpenApi(app);
 
 app.use(
 	"/trpc/*",
@@ -19,12 +19,12 @@ app.use(
 );
 
 app.get("/generate", async (c) => {
-	const pdf = await generator.generate({ content: TEST })
+	const pdf = await generator.generate({ content: TEST });
 
 	c.res.headers.set("Content-Type", "application/pdf");
 
 	return c.body(pdf);
-})
+});
 
 export const GET = handle(app);
 export const POST = handle(app);
