@@ -7,7 +7,7 @@ export function configureOpenApi(app: AppOpenApi) {
 		openapi: "3.0.0",
 		info: {
 			version: packageJSON.version,
-			title: "Tasks API",
+			title: "Document Generator API",
 		},
 	});
 
@@ -21,7 +21,7 @@ export function configureOpenApi(app: AppOpenApi) {
 				clientKey: "fetch",
 			},
 			spec: {
-				url: "/doc",
+				url: "/api/doc",
 			},
 		}),
 	);
