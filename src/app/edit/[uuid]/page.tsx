@@ -41,8 +41,8 @@ export default function Page() {
 				content: data.content,
 			}}
 		>
-			{({ isPending, form }) => (
-				<main className="flex flex-col h-screen">
+			{({ isPending }) => (
+				<main className="flex flex-col">
 					<div className="h-20 border-b flex-shrink-0">
 						<div className="w-full h-full px-6 flex items-center justify-between">
 							<h2 className="font-bold">LOGO</h2>
@@ -61,18 +61,8 @@ export default function Page() {
 							</div>
 						</div>
 					</div>
-					<div className="flex-1 p-8 flex gap-2">
-						<div>
-							<CodeMirror name="content" />
-						</div>
-						<div className="h-full w-1/2">
-							<iframe
-								title="frame"
-								width={500}
-								className="max-h-[800px] h-full"
-								srcDoc={form.watch("content")}
-							/>
-						</div>
+					<div className="flex-1 p-8 flex gap-2 min-h-0 h-full">
+						<CodeMirror name="content" />
 					</div>
 				</main>
 			)}
