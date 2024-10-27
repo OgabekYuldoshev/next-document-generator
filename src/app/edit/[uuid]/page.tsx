@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import EditForm from "./form";
+import CodeMirror from "@/components/code-mirror";
 
 export default function Page() {
 	const { uuid } = useParams<{ uuid: string }>();
@@ -62,7 +63,7 @@ export default function Page() {
 						</div>
 					</div>
 					<div className="flex-1 p-8">
-						<CodeEditor name="content" />
+						<CodeMirror name="content" />
 					</div>
 				</main>
 			)}
