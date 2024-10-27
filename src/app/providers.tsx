@@ -8,7 +8,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { Loader2 } from "lucide-react";
 import NextAdapterApp from "next-query-params/app";
-import { Suspense, type PropsWithChildren } from "react";
+import { type PropsWithChildren, Suspense } from "react";
 import { QueryParamProvider } from "use-query-params";
 
 export const trpcClient = trpc.createClient({

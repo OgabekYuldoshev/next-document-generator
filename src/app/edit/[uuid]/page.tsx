@@ -5,19 +5,27 @@ import { trpc } from "@/lib/trpc";
 import { Home, Loader2, Save, X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React, { Suspense } from "react";
+import React from "react";
 import EditForm from "./form";
 
 export default function Page() {
 	const { uuid } = useParams<{ uuid: string }>();
-	const [data, { error, isError }] = trpc.content.single.useSuspenseQuery(
+	const { data, isFetched, isError, error } = trpc.content.single.useQuery(
 		{ uuid },
 		{
 			retry: false,
 		},
 	);
 
-	if (isError) {
+	if (!isFetched) {
+		return (
+			<main className="w-full h-screen flex items-center justify-center">
+				<Loader2 className="animate-spin" />
+			</main>
+		);
+	}
+
+	if (isError || !data) {
 		return (
 			<main className="w-full h-screen flex items-center justify-center">
 				<div>{error?.message}</div>
@@ -33,7 +41,7 @@ export default function Page() {
 				content: data.content,
 			}}
 		>
-			{({ isPending }) => (
+			{({ isPending, form }) => (
 				<main className="flex flex-col h-screen">
 					<div className="h-20 border-b flex-shrink-0">
 						<div className="w-full h-full px-6 flex items-center justify-between">
@@ -53,8 +61,18 @@ export default function Page() {
 							</div>
 						</div>
 					</div>
-					<div className="flex-1 p-8">
-						<CodeMirror name="content" />
+					<div className="flex-1 p-8 flex gap-2">
+						<div>
+							<CodeMirror name="content" />
+						</div>
+						<div className="h-full w-1/2">
+							<iframe
+								title="frame"
+								width={500}
+								className="max-h-[800px] h-full"
+								srcDoc={form.watch("content")}
+							/>
+						</div>
 					</div>
 				</main>
 			)}

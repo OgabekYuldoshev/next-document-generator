@@ -4,8 +4,21 @@ import HttpStatusCodes from "http-status-codes";
 const tags = ["Content"];
 
 export const generate = createRoute({
-	path: "/content/generate",
-	method: "get",
+	path: "/content/generate/:key",
+	method: "post",
+	request: {
+		body: {
+			content: {
+				"application/json": {
+					schema: z.record(z.string(), z.any()),
+				},
+			},
+			description: "Send rendering data",
+		},
+		params: z.object({
+			key: z.string().toUpperCase(),
+		}),
+	},
 	tags,
 	responses: {
 		[HttpStatusCodes.OK]: {

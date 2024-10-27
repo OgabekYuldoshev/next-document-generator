@@ -3,6 +3,7 @@ import { trpc } from "@/lib/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { type ReactNode } from "react";
 import { type UseFormReturn, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const validationSchema = z.object({
@@ -22,7 +23,11 @@ export type EditFormProps = {
 };
 export default function EditForm(props: EditFormProps) {
 	const { initialValues, uuid } = props;
-	const { mutate, isPending } = trpc.document.update.useMutation();
+	const { mutate, isPending } = trpc.content.update.useMutation({
+		onSuccess() {
+			toast.success("Content updated successfully");
+		},
+	});
 	const form = useForm({
 		resolver: zodResolver(validationSchema),
 		defaultValues: initialValues,
