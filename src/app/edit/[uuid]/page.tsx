@@ -1,5 +1,6 @@
 "use client";
 import { CodeEditor } from "@/components/code-editor";
+import CodeMirror from "@/components/code-mirror";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { Home, Loader2, Save, X } from "lucide-react";
@@ -7,7 +8,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import EditForm from "./form";
-import CodeMirror from "@/components/code-mirror";
 
 export default function Page() {
 	const { uuid } = useParams<{ uuid: string }>();

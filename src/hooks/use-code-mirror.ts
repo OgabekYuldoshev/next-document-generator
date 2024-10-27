@@ -1,11 +1,11 @@
-import { type MutableRefObject, useEffect, useRef, useState } from "react";
-import { oneDark } from "@codemirror/theme-one-dark";
-import { html } from "@codemirror/lang-html";
 import { indentWithTab } from "@codemirror/commands";
+import { html } from "@codemirror/lang-html";
+import { oneDark } from "@codemirror/theme-one-dark";
+import { type MutableRefObject, useEffect, useRef, useState } from "react";
 
-import { EditorView, basicSetup } from "codemirror";
 import type { EditorState } from "@codemirror/state";
 import { keymap } from "@codemirror/view";
+import { EditorView, basicSetup } from "codemirror";
 
 const baseTheme = EditorView.baseTheme({
 	"&": {
