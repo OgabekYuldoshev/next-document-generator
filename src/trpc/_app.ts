@@ -1,8 +1,8 @@
-import { documentRoute } from "./routes/document";
+import { contentRoute } from "./routes/content";
 import { router } from "./server";
 
 export const appRouter = router({
-	document: documentRoute,
+	content: contentRoute,
 });
 
 export type AppRouter = typeof appRouter;

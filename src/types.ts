@@ -12,6 +12,7 @@ export interface Content {
 	uuid: string;
 	key: string;
 	title: string;
+	status: "published" | "deleted";
 	contentPath: string;
 	createdAt: string;
 }

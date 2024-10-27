@@ -123,6 +123,7 @@ class MetaData {
 			key: constantCase(key),
 			title,
 			contentPath,
+			status: "published",
 			createdAt: new Date().toISOString(),
 		};
 
@@ -152,6 +153,16 @@ class MetaData {
 		};
 	}
 
+	public async delete(uuid: string) {
+		const meta = await this.getMetaFile();
+		const item = meta.contents.find((c) => c.uuid === uuid);
+		if (!item) {
+			return null;
+		}
+		item.status = "deleted";
+		await this.updateMetaFile(meta);
+	}
+
 	// biome-ignore lint/complexity/noBannedTypes: <explanation>
 	public async find<TSchema extends {} = {}>(
 		query: Query<MetadataSchema<TSchema>>,
@@ -165,7 +176,17 @@ class MetaData {
 		pageSize = 10,
 	}: { pageSize: number; currentPage: number }) {
 		const meta = await this.getMetaFile();
-		return paginate(meta.contents, currentPage, pageSize);
+		return paginate(
+			meta.contents.filter(
+				sift({
+					status: {
+						$eq: "published",
+					},
+				}),
+			),
+			currentPage,
+			pageSize,
+		);
 	}
 }
 

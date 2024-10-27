@@ -1,32 +1,23 @@
 "use client";
-import { CodeEditor } from "@/components/code-editor";
 import CodeMirror from "@/components/code-mirror";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
 import { Home, Loader2, Save, X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 import EditForm from "./form";
 
 export default function Page() {
 	const { uuid } = useParams<{ uuid: string }>();
-	const { data, isFetched, isError, error } = trpc.document.single.useQuery(
+	const [data, { error, isError }] = trpc.content.single.useSuspenseQuery(
 		{ uuid },
 		{
 			retry: false,
 		},
 	);
 
-	if (!isFetched) {
-		return (
-			<main className="w-full h-screen flex items-center justify-center">
-				<Loader2 className="animate-spin" />
-			</main>
-		);
-	}
-
-	if (isError || !data) {
+	if (isError) {
 		return (
 			<main className="w-full h-screen flex items-center justify-center">
 				<div>{error?.message}</div>

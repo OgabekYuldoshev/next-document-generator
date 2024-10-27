@@ -15,7 +15,7 @@ export default function Home() {
 
 	const router = useRouter();
 
-	const { data, isFetched } = trpc.document.list.useQuery(
+	const { data, isFetched } = trpc.content.list.useQuery(
 		{
 			currentPage: page,
 			pageSize: size,
@@ -29,6 +29,7 @@ export default function Home() {
 				totalPages: 0,
 			},
 			retry: false,
+			refetchOnWindowFocus: false,
 		},
 	);
 

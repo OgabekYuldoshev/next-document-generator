@@ -3,7 +3,7 @@ import { TRPCClientError } from "@trpc/client";
 import z from "zod";
 import { publicProcedure, router } from "../server";
 
-export const documentRoute = router({
+export const contentRoute = router({
 	create: publicProcedure
 		.input(
 			z.object({

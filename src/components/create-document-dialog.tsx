@@ -39,11 +39,11 @@ export const CreateDocumentDialog = () => {
 	const router = useRouter();
 	const [open, setOpen] = useState(false);
 
-	const { mutate, isPending } = trpc.document.create.useMutation({
+	const { mutate, isPending } = trpc.content.create.useMutation({
 		onSuccess({ uuid }) {
-			toast.success("Document created successfully");
 			setOpen(false);
 			router.push(`/edit/${uuid}`);
+			toast.success("Document created successfully");
 		},
 	});
 	const form = useForm<FormValue>({
