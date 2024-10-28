@@ -1,4 +1,3 @@
-import type { DropdownMenuItemProps } from "@radix-ui/react-dropdown-menu";
 import {
 	type ColumnDef,
 	flexRender,
@@ -6,7 +5,7 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { useMemo } from "react";
+import { type ReactNode, useMemo } from "react";
 
 import {
 	Table,
@@ -112,9 +111,9 @@ export function DataTable<TData, TValue>({
 											{header.isPlaceholder
 												? null
 												: flexRender(
-														header.column.columnDef.header,
-														header.getContext(),
-													)}
+													header.column.columnDef.header,
+													header.getContext(),
+												)}
 										</TableHead>
 									);
 								})}
@@ -175,7 +174,9 @@ export function DataTable<TData, TValue>({
 }
 
 export interface ITableActions {
-	actions: Array<{ label: string } & Omit<DropdownMenuItemProps, "children">>;
+	actions: Array<
+		{ label: ReactNode } & React.ComponentProps<typeof DropdownMenuItem>
+	>;
 }
 
 export const TableActions = ({ actions }: ITableActions) => {
@@ -186,10 +187,10 @@ export const TableActions = ({ actions }: ITableActions) => {
 					<MoreHorizontal className="h-4 w-4" />
 				</Button>
 			</DropdownMenuTrigger>
-			<DropdownMenuContent align="end">
+			<DropdownMenuContent className="min-w-[160px]">
 				{actions.map((action) => {
 					return (
-						<DropdownMenuItem {...action} key={action.label}>
+						<DropdownMenuItem {...action} key={action.key}>
 							{action.label}
 						</DropdownMenuItem>
 					);

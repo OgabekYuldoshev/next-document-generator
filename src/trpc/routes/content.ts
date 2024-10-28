@@ -22,6 +22,14 @@ export const contentRoute = router({
 			const { uuid, ...values } = ctx.input;
 			return metadata.update(uuid, values);
 		}),
+	delete: publicProcedure
+		.input(
+			z.object({ uuid: z.string() }),
+		)
+		.mutation(async (ctx) => {
+			const { uuid } = ctx.input;
+			return metadata.delete(uuid);
+		}),
 	list: publicProcedure
 		.input(
 			z.object({

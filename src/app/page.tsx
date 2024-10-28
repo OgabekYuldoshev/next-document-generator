@@ -5,8 +5,9 @@ import { DataTable, TableActions } from "@/components/ui/data-table";
 import dayjs from "dayjs";
 
 import { trpc } from "@/lib/trpc";
-import { Settings } from "lucide-react";
+import { Edit, Settings, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 
 export default function Home() {
@@ -15,7 +16,7 @@ export default function Home() {
 
 	const router = useRouter();
 
-	const { data, isFetched } = trpc.content.list.useQuery(
+	const { data, isFetched, refetch } = trpc.content.list.useQuery(
 		{
 			currentPage: page,
 			pageSize: size,
@@ -32,6 +33,13 @@ export default function Home() {
 			refetchOnWindowFocus: false,
 		},
 	);
+
+	const { mutate } = trpc.content.delete.useMutation({
+		onSuccess() {
+			toast.success("Document deleted successfully");
+			refetch()
+		},
+	})
 
 	return (
 		<div className="flex flex-col w-full">
@@ -70,8 +78,27 @@ export default function Home() {
 										<TableActions
 											actions={[
 												{
-													label: "Edit",
+													key: 'edit',
+													inset: true,
+													label: (
+														<div className="flex items-center">
+															<Edit size={18} className="mr-2" />
+															Edit
+														</div>
+													),
 													onClick: () => router.push(`/edit/${item.uuid}`),
+												},
+												{
+													key: 'edit',
+													inset: true,
+													className: 'bg-destructive',
+													label: (
+														<div className="flex items-center">
+															<Trash size={18} className="mr-2" />
+															Delete
+														</div>
+													),
+													onClick: () => mutate({ uuid: item.uuid }),
 												},
 											]}
 										/>
