@@ -37,9 +37,9 @@ export default function Home() {
 	const { mutate } = trpc.content.delete.useMutation({
 		onSuccess() {
 			toast.success("Document deleted successfully");
-			refetch()
+			refetch();
 		},
-	})
+	});
 
 	return (
 		<div className="flex flex-col w-full">
@@ -78,7 +78,7 @@ export default function Home() {
 										<TableActions
 											actions={[
 												{
-													key: 'edit',
+													key: "edit",
 													inset: true,
 													label: (
 														<div className="flex items-center">
@@ -89,9 +89,9 @@ export default function Home() {
 													onClick: () => router.push(`/edit/${item.uuid}`),
 												},
 												{
-													key: 'edit',
+													key: "edit",
 													inset: true,
-													className: 'bg-destructive',
+													className: "bg-destructive",
 													label: (
 														<div className="flex items-center">
 															<Trash size={18} className="mr-2" />

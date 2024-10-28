@@ -23,9 +23,7 @@ export const contentRoute = router({
 			return metadata.update(uuid, values);
 		}),
 	delete: publicProcedure
-		.input(
-			z.object({ uuid: z.string() }),
-		)
+		.input(z.object({ uuid: z.string() }))
 		.mutation(async (ctx) => {
 			const { uuid } = ctx.input;
 			return metadata.delete(uuid);

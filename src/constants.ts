@@ -18,7 +18,7 @@ export const METADATA_DIR = ".metacontent";
 export const METADATA_FILENAME = "metadata.json";
 
 export const DEFAULT_METADATA = {
-  contents: [],
+	contents: [],
 } as Metadata;
 
 export const TEST = `

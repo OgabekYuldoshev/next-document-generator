@@ -1,9 +1,9 @@
-import { HTTPException } from "hono/http-exception";
 import { NunjucksEngine } from "@/engines/nunjucks";
 import generator from "@/lib/generator";
-import type { AppRouteHandler } from "@/types";
-import type { GenerateRoute } from "./content.routes";
 import metadata from "@/lib/metadata";
+import type { AppRouteHandler } from "@/types";
+import { HTTPException } from "hono/http-exception";
+import type { GenerateRoute } from "./content.routes";
 
 export const generate: AppRouteHandler<GenerateRoute> = async (c) => {
 	const { key } = c.req.valid("param");
