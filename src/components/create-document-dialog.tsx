@@ -2,7 +2,7 @@
 import { trpc } from "@/lib/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { constantCase, snakeCase } from "change-case";
-import { Loader2, Save } from "lucide-react";
+import { File, Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,6 @@ import { Input } from "./ui/input";
 
 const formSchema = z.object({
 	title: z.string().min(3),
-	key: z.string().min(3),
 });
 
 type FormValue = z.infer<typeof formSchema>;
@@ -56,7 +55,10 @@ export const CreateDocumentDialog = () => {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button>New document</Button>
+				<Button>
+					<File size={18} className="mr-2" />
+					New document
+				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
@@ -80,25 +82,12 @@ export const CreateDocumentDialog = () => {
 										<Input {...field} placeholder="Write..." />
 									</FormControl>
 									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="key"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Key</FormLabel>
-									<FormControl>
-										<Input {...field} placeholder="Write..." />
-									</FormControl>
 									{field.value && (
 										<FormDescription>
-											Your key should be like this:{" "}
+											Your content key:{" "}
 											<code>{constantCase(field.value)}</code>
 										</FormDescription>
 									)}
-									<FormMessage />
 								</FormItem>
 							)}
 						/>

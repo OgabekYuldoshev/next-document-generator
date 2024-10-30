@@ -43,14 +43,16 @@ export default function Home() {
 
 	return (
 		<div className="flex flex-col w-full">
-			<div className="h-20 border-b">
+			<div className="h-16 border-b">
 				<div className="w-full h-full mx-auto px-8 flex items-center justify-between">
 					<h2 className="font-bold">LOGO</h2>
-					<CreateDocumentDialog />
 				</div>
 			</div>
 			<div className="w-full max-w-screen-lg md:px-0 px-8 py-8 mx-auto">
-				<h2 className="font-bold text-xl">Your documents</h2>
+				<div className="flex items-center justify-between w-full">
+					<h2 className="font-bold text-xl">Your documents</h2>
+					<CreateDocumentDialog />
+				</div>
 				<div className="mt-4">
 					<DataTable
 						isLoading={!isFetched}

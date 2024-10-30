@@ -11,13 +11,12 @@ import type { Content, Metadata, MetadataSchema } from "@/types";
 import { constantCase } from "change-case";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import sift, { type Query } from "sift";
+import { firstBy } from "thenby";
 import z from "zod";
 import { paginate } from "./paginate";
-
 const schemas = {
 	create: z.object({
-		key: z.string(),
-		title: z.string(),
+		title: z.string().min(3),
 	}),
 	update: z.object({
 		content: z.string(),
@@ -109,7 +108,7 @@ class MetaData {
 		return JSON.parse(file);
 	}
 
-	public async create({ title, key }: z.infer<typeof schemas.create>) {
+	public async create({ title }: z.infer<typeof schemas.create>) {
 		const meta = await this.getMetaFile();
 		const uuid = randomUUID();
 
@@ -118,9 +117,32 @@ class MetaData {
 			content: DEFAULT_CONTENT,
 		});
 
+		let key = constantCase(title);
+
+		const contentsByKey = meta.contents.filter(
+			sift({
+				$and: [
+					{
+						status: {
+							$not: "deleted",
+						},
+					},
+					{
+						key: {
+							$regex: constantCase(title),
+						},
+					},
+				],
+			}),
+		);
+
+		if (contentsByKey.length > 0) {
+			key += `_${contentsByKey.length + 1}`;
+		}
+
 		const newContent: Content = {
 			uuid,
-			key: constantCase(key),
+			key,
 			title,
 			contentPath,
 			status: "published",
@@ -145,6 +167,7 @@ class MetaData {
 		item.title = values.title;
 
 		await this.updateMetaFile(meta);
+
 		const content = await this.updateContentFile(item.uuid, values.content);
 
 		return {
@@ -177,13 +200,17 @@ class MetaData {
 	}: { pageSize: number; currentPage: number }) {
 		const meta = await this.getMetaFile();
 		return paginate(
-			meta.contents.filter(
-				sift({
-					status: {
-						$eq: "published",
-					},
-				}),
-			),
+			meta.contents
+				.filter(
+					sift({
+						status: {
+							$eq: "published",
+						},
+					}),
+				)
+				.sort(
+					firstBy("createdAt", { direction: "desc" })
+				),
 			currentPage,
 			pageSize,
 		);

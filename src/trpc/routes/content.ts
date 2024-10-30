@@ -7,7 +7,6 @@ export const contentRoute = router({
 	create: publicProcedure
 		.input(
 			z.object({
-				key: z.string(),
 				title: z.string(),
 			}),
 		)
