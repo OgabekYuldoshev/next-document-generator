@@ -37,6 +37,10 @@ export const contentRoute = router({
 		.query(async (ctx) => {
 			return metadata.getList(ctx.input);
 		}),
+	all: publicProcedure
+		.query(async () => {
+			return metadata.find({});
+		}),
 	single: publicProcedure
 		.input(z.object({ uuid: z.string() }))
 		.query(async (ctx) => {

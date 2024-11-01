@@ -1,3 +1,4 @@
+import Sidebar from "@/components/sidebar";
 import "../assets/styles/globals.css";
 
 import RootProvider from "@/providers/root-provider";
@@ -29,9 +30,12 @@ export default function RootLayout({
 		<html lang="en">
 			<RootProvider>
 				<body
-					className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+					className={`${geistSans.variable} ${geistMono.variable} antialiased dark flex flex-col w-full min-h-screen`}
 				>
-					{children}
+					<Sidebar />
+					<section className="flex-1 pl-[280px]">
+						{children}
+					</section>
 				</body>
 			</RootProvider>
 		</html>

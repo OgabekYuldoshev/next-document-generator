@@ -3,12 +3,16 @@ import type { AppRouter } from "@/trpc/_app";
 import type { inferRouterOutputs } from "@trpc/server";
 import constate from "constate";
 import { Loader2 } from "lucide-react";
-import React, { type PropsWithChildren } from "react";
+import React, {
+    type ReactNode,
+    type PropsWithChildren,
+    type ReactElement,
+} from "react";
 
-type Content = inferRouterOutputs<AppRouter>['content']['single']
+type Content = inferRouterOutputs<AppRouter>["content"]["single"];
 
 interface State {
-    item: Content
+    item: Content;
 }
 
 const SingleContext = React.createContext<State>({
@@ -25,8 +29,10 @@ function useContentContext() {
 function ContentProvider({
     uuid,
     children,
-}: PropsWithChildren<{ uuid: string }>) {
-    const { data, isFetched, isError, error } = trpc.content.single.useQuery({ uuid });
+}: { children: ((content: Content) => ReactNode) | ReactNode; uuid: string }) {
+    const { data, isFetched, isError, error } = trpc.content.single.useQuery({
+        uuid,
+    });
 
     if (!isFetched) {
         return (
@@ -41,7 +47,7 @@ function ContentProvider({
             <div className="w-full h-screen flex items-center justify-center">
                 {error.message}
             </div>
-        )
+        );
     }
 
     if (!data) {
@@ -49,14 +55,12 @@ function ContentProvider({
             <div className="w-full h-screen flex items-center justify-center">
                 Content is not found!
             </div>
-        )
+        );
     }
 
     return (
-        <SingleContext.Provider
-            value={{ item: data }}
-        >
-            {children}
+        <SingleContext.Provider value={{ item: data }}>
+            {typeof children === "function" ? children(data) : children}
         </SingleContext.Provider>
     );
 }

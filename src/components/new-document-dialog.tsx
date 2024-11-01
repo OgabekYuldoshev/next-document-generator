@@ -1,10 +1,11 @@
 "use client";
+
 import { trpc } from "@/lib/trpc";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { constantCase, snakeCase } from "change-case";
-import { File, Loader2, Save } from "lucide-react";
+import { constantCase } from "change-case";
+import { Loader2, Save } from "lucide-react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -87,11 +88,11 @@ export const NewDocumentDialog = ({ open, onClose }: { open: boolean; onClose():
 						<div className="flex justify-end">
 							<Button disabled={isPending} type="submit">
 								{isPending ? (
-									<Loader2 size={18} className="animate-spin mr-2" />
+									<Loader2 size={18} className="animate-spin" />
 								) : (
-									<Save size={18} className="mr-2" />
+									<Save size={18} />
 								)}
-								Save
+								Submit
 							</Button>
 						</div>
 					</form>
