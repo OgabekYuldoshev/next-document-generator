@@ -34,14 +34,13 @@ const formSchema = z.object({
 
 type FormValue = z.infer<typeof formSchema>;
 
-export const CreateDocumentDialog = () => {
+export const NewDocumentDialog = ({ open, onClose }: { open: boolean; onClose(): void }) => {
 	const router = useRouter();
-	const [open, setOpen] = useState(false);
 
 	const { mutate, isPending } = trpc.content.create.useMutation({
 		onSuccess({ uuid }) {
-			setOpen(false);
-			router.push(`/edit/${uuid}`);
+			onClose()
+			router.push(`/c/${uuid}/content`);
 			toast.success("Document created successfully");
 		},
 	});
@@ -53,13 +52,7 @@ export const CreateDocumentDialog = () => {
 		mutate(values);
 	}
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>
-				<Button>
-					<File size={18} className="mr-2" />
-					New document
-				</Button>
-			</DialogTrigger>
+		<Dialog open={open} onOpenChange={onClose}>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>New document</DialogTitle>

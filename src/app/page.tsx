@@ -1,16 +1,19 @@
 "use client";
 
-import { CreateDocumentDialog } from "@/components/create-document-dialog";
 import { DataTable, TableActions } from "@/components/ui/data-table";
 import dayjs from "dayjs";
 
+import { NewDocumentDialog } from "@/components/new-document-dialog";
+import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Edit, Settings, Trash } from "lucide-react";
+import { Edit, File, Settings, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 import { NumberParam, useQueryParam, withDefault } from "use-query-params";
 
 export default function Home() {
+	const [isModal, setModal] = useState(false)
 	const [page] = useQueryParam("page", withDefault(NumberParam, 0));
 	const [size] = useQueryParam("size", withDefault(NumberParam, 10));
 
@@ -51,7 +54,10 @@ export default function Home() {
 			<div className="w-full max-w-screen-lg md:px-0 px-8 py-8 mx-auto">
 				<div className="flex items-center justify-between w-full">
 					<h2 className="font-bold text-xl">Your documents</h2>
-					<CreateDocumentDialog />
+					<Button onClick={() => setModal(true)}>
+						<File size={18} className="mr-2" />
+						New document
+					</Button>
 				</div>
 				<div className="mt-4">
 					<DataTable
@@ -88,10 +94,10 @@ export default function Home() {
 															Edit
 														</div>
 													),
-													onClick: () => router.push(`/edit/${item.uuid}`),
+													onClick: () => router.push(`/c/${item.uuid}`),
 												},
 												{
-													key: "edit",
+													key: "delete",
 													inset: true,
 													className: "bg-destructive",
 													label: (
@@ -115,6 +121,7 @@ export default function Home() {
 						}}
 						data={data.data}
 					/>
+					<NewDocumentDialog onClose={() => setModal(false)} open={isModal} />
 				</div>
 			</div>
 		</div>

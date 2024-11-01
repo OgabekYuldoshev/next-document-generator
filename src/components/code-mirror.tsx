@@ -16,9 +16,7 @@ const CodeMirror = (props: Props) => {
 	});
 
 	return (
-		<div className="h-full w-full flex-1 min-h-0 rounded-lg overflow-hidden">
-			<div ref={ref} />
-		</div>
+		<div ref={ref} className="flex-1 w-full" />
 	);
 };
 
